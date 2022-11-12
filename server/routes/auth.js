@@ -22,9 +22,9 @@ authRouter.post('/api/signup', async (req, res) => {
     }
 
     // Return the User info received in the form of JSON
-    res.json({ user: user });
-  } catch (error) {
-    console.warn(error);
+    res.status(200).json({ user: user });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 });
 
