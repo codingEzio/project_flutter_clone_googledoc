@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "Backend server for Google Docs clone",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "start": "node ./index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
