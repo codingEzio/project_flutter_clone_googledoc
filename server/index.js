@@ -1,10 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const authRouter = require('./routes/auth');
 
 const PORT = process.env.PORT | 3001;
 
 const app = express();
+
+app.use(express.json());
+app.use(authRouter);
+
 const db = `mongodb+srv://app-flutter-googledoc-clone:${process.env.DB_MONGODB_PASSWORD}@cluster0.bnb6949.mongodb.net/?retryWrites=true&w=majority`;
 
 mongoose
