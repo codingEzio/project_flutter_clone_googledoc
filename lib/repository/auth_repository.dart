@@ -53,8 +53,10 @@ class AuthRepository {
         // Do certain things based on the result we got from POSTing data
         switch (res.statusCode) {
           case 200:
-            final newUser =
-                userAccount.copyWith(uid: jsonDecode(res.body)['user']['_id']);
+            final newUser = userAccount.copyWith(
+              uid: jsonDecode(res.body)['user']['_id'],
+              token: jsonDecode(res.body)['token'],
+            );
 
             error = ErrorModel(error: null, data: newUser);
             break;
