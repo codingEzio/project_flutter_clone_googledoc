@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_flutter_clone_googledoc/screen/login_screen.dart';
 
 void main() {
+  print("");
+  print("Remember to change your IP for authentication to work properly!!");
+  print("Remember to change your IP for authentication to work properly!!\n");
+
   runApp(const ProviderScope(
     child: MyApp(),
   ));
