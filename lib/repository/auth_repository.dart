@@ -6,11 +6,13 @@ import 'package:http/http.dart';
 import 'package:project_flutter_clone_googledoc/models/error_model.dart';
 import 'package:project_flutter_clone_googledoc/models/user_model.dart';
 import 'package:project_flutter_clone_googledoc/constants.dart';
+import 'package:project_flutter_clone_googledoc/repository/local_storage_repository.dart';
 
 final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
     googleSignIn: GoogleSignIn(),
     client: Client(),
+    localStorageRepository: LocalStorageRepository(),
   ),
 );
 
@@ -19,12 +21,15 @@ final userProvider = StateProvider<UserModel?>((ref) => null);
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
   final Client _client;
+  final LocalStorageRepository _localStorageRepository;
 
   AuthRepository({
     required GoogleSignIn googleSignIn,
     required Client client,
+    required LocalStorageRepository localStorageRepository,
   })  : _googleSignIn = googleSignIn,
-        _client = client;
+        _client = client,
+        _localStorageRepository = localStorageRepository;
 
   Future<ErrorModel> signInWithGoogle() async {
     // Either it succeeds or not, it carries the information for further
@@ -59,6 +64,9 @@ class AuthRepository {
             );
 
             error = ErrorModel(error: null, data: newUser);
+
+            _localStorageRepository.setToken(newUser.token);
+
             break;
 
           default:
