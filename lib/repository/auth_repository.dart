@@ -44,11 +44,12 @@ class AuthRepository {
         // Since we already en force all the fields here are non-nullable,
         // we could let Dart know that by adding '!' after the variable.
         final userAccount = UserModel(
-            email: user.email,
-            name: user.displayName!,
-            profilePic: user.photoUrl!,
-            uid: '',
-            token: '');
+          email: user.email,
+          name: user.displayName ?? '',
+          profilePic: user.photoUrl ?? '',
+          uid: '',
+          token: '',
+        );
 
         // Post authentication user information to our DB backend MongoDB
         var res = await _client.post(Uri.parse('$host/api/signup'),
