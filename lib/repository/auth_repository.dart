@@ -80,4 +80,41 @@ class AuthRepository {
 
     return error;
   }
+
+  Future<ErrorModel> getUserData() async {
+    ErrorModel error = ErrorModel(
+      error: "Unexpected error occured from getUserData()",
+      data: null,
+    );
+
+    try {
+      String? token = await _localStorageRepository.getToken();
+
+      if (token != null) {
+        var res = await _client.get(Uri.parse("$host/"), headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          'auth-token-jwt': token,
+        });
+
+        switch (res.statusCode) {
+          case 200:
+            final newUser = UserModel.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)['user'],
+              ),
+            ).copyWith(token: token);
+
+            error = ErrorModel(error: null, data: newUser);
+
+            _localStorageRepository.setToken(newUser.token);
+
+            break;
+        }
+      }
+    } catch (e) {
+      error = ErrorModel(error: e.toString(), data: null);
+    }
+
+    return error;
+  }
 }

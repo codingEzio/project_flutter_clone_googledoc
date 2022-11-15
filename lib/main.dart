@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project_flutter_clone_googledoc/models/error_model.dart';
+import 'package:project_flutter_clone_googledoc/repository/auth_repository.dart';
+import 'package:project_flutter_clone_googledoc/screen/home_screen.dart';
 import 'package:project_flutter_clone_googledoc/screen/login_screen.dart';
 
 void main() {
@@ -12,23 +15,42 @@ void main() {
   ));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
+  ErrorModel? errorModel;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getUserData();
+  }
+
+  void getUserData() async {
+    errorModel = await ref.read(authRepositoryProvider).getUserData();
+
+    if (errorModel != null && errorModel!.data != null) {
+      ref.read(userProvider.notifier).update((state) => errorModel!.data);
+    }
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      home: user == null ? const LoginScreen() : const HomeScreen(),
     );
   }
 }
